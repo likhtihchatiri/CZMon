@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 # --- Global Configurations ---
 DEF_UNAME = "admin"
-DEF_PWD = "Nutanix.123"
+DEF_PWD = "CZNutanix.1234"
 SHELL_PROMPT_DELAY = 2
 HOSTSSH_EXECUTION_DELAY = 15
 BUFFER_POLL_DELAY = 1
