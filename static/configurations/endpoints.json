@@ -1,34 +1,34 @@
 {
   "AZ1": [
     {
-      "type":"PC",
-      "name": "",
-      "ip": "",
-      "user": "",
-      "password": ""
+      "type": "PC",
+      "name": "GF_PC",
+      "ip": "10.36.191.160",
+      "user": "admin",
+      "password": "Nutanix.123"
     },
     {
-      "type":"PE",
-      "name": "",
-      "ip": "",
-      "user": "",
-      "password": ""
+      "type": "PE",
+      "name": "GF_PE",
+      "ip": "10.36.133.211",
+      "user": "admin",
+      "password": "Nutanix.123"
     }
   ],
   "AZ2": [
     {
-      "type":"PC",
-      "name": "",
-      "ip": "",
-      "user": "",
-      "password": ""
+      "type": "PC",
+      "name": "GF_PC",
+      "ip": "10.36.191.162",
+      "user": "admin",
+      "password": "Nutanix.123"
     },
     {
-      "type":"PE",
-      "name": "",
-      "ip": "",
-      "user": "",
-      "password": ""
+      "type": "PE",
+      "name": "GF_PE",
+      "ip": "10.36.133.116",
+      "user": "admin",
+      "password": "Nutanix.123"
     }
   ]
 }
