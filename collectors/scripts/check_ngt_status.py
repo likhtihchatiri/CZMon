@@ -37,6 +37,9 @@ def _build_session(username: str, password: str) -> requests.Session:
   Args:
     username (str): Prism Element username used for HTTP basic auth.
     password (str): Prism Element password used for HTTP basic auth.
+
+  Returns:
+    requests.Session: Session with basic auth, JSON headers, and retries.
   """
   session = requests.Session()
   session.auth = (username, password)
@@ -71,6 +74,9 @@ def _request_json(
     method (str): HTTP method, for example GET or POST.
     url (str): Fully qualified API URL to call.
     **kwargs: Extra arguments forwarded to session.request (json, params, etc.).
+
+  Returns:
+    dict: Parsed JSON body from a successful response.
   """
   last_error = None
   for attempt in range(1, MAX_RETRIES + 1):
@@ -131,6 +137,10 @@ def _extract_ngt(vm_payload: dict) -> dict:
 
   Args:
     vm_payload (dict): VM entity from the v3 list/GET response or the v2 wrapper.
+
+  Returns:
+    dict: Normalized NGT fields including name, uuid, power_state, ngt_state,
+      enabled state, version, reachability, and capabilities.
   """
   status = vm_payload.get("status") or {}
   spec = vm_payload.get("spec") or {}
@@ -174,6 +184,10 @@ def _list_vm_entities(session: requests.Session, cluster_ip: str) -> tuple:
   Args:
     session (requests.Session): Authenticated session used to call Prism APIs.
     cluster_ip (str): Prism Element cluster IP or FQDN.
+
+  Returns:
+    tuple: Pair of (entities, incomplete). entities is a list of VM payloads;
+      incomplete is True when listing stopped before all VMs were fetched.
   """
   base_v3 = f"https://{cluster_ip}:9440/api/nutanix/v3"
   entities = []
@@ -243,6 +257,10 @@ def _list_vm_entities_v2(session: requests.Session, cluster_ip: str) -> tuple:
   Args:
     session (requests.Session): Authenticated session used to call Prism APIs.
     cluster_ip (str): Prism Element cluster IP or FQDN.
+
+  Returns:
+    tuple: Pair of (entities, incomplete). entities is a list of v2 VMs wrapped
+      for _extract_ngt; incomplete is True when paging stopped early.
   """
   base_v2 = f"https://{cluster_ip}:9440/api/nutanix/v2.0/vms"
   entities = []
@@ -403,6 +421,9 @@ def collect_all_ngt_status(config_path: str = None) -> None:
   Args:
     config_path (str, optional): Path to the endpoints JSON config file.
                                  Defaults to None (auto-resolves path).
+
+  Returns:
+    None: Prints a JSON object of NGT results keyed by cluster IP to stdout.
   """
   if not config_path:
     base_dir = os.path.dirname(
