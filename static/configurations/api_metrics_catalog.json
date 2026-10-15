@@ -24,6 +24,7 @@
       "metrics": "controller_num_iops",
       "intervalInSecs": 30
     },
+    "store_ip_address": true,
     "value_paths": [
       {
         "alias": "controller_iops",
