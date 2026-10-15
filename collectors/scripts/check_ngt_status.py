@@ -32,7 +32,12 @@ logger = logging.getLogger(__name__)
 
 
 def _build_session(username: str, password: str) -> requests.Session:
-  """Create a session with auth, headers, and transport-level retries."""
+  """Create a session with auth, headers, and transport-level retries.
+
+  Args:
+    username (str): Prism Element username used for HTTP basic auth.
+    password (str): Prism Element password used for HTTP basic auth.
+  """
   session = requests.Session()
   session.auth = (username, password)
   session.headers.update(
@@ -59,7 +64,14 @@ def _request_json(
   url: str,
   **kwargs,
 ) -> dict:
-  """Send an HTTP request with timeout retries and return parsed JSON."""
+  """Send an HTTP request with timeout retries and return parsed JSON.
+
+  Args:
+    session (requests.Session): Authenticated session used to send the request.
+    method (str): HTTP method, for example GET or POST.
+    url (str): Fully qualified API URL to call.
+    **kwargs: Extra arguments forwarded to session.request (json, params, etc.).
+  """
   last_error = None
   for attempt in range(1, MAX_RETRIES + 1):
     try:
@@ -115,7 +127,11 @@ def _request_json(
 
 
 def _extract_ngt(vm_payload: dict) -> dict:
-  """Pull NGT fields from a v3 VM list/GET entity."""
+  """Pull NGT fields from a v3 VM list/GET entity.
+
+  Args:
+    vm_payload (dict): VM entity from the v3 list/GET response or the v2 wrapper.
+  """
   status = vm_payload.get("status") or {}
   spec = vm_payload.get("spec") or {}
   metadata = vm_payload.get("metadata") or {}
@@ -154,6 +170,10 @@ def _list_vm_entities(session: requests.Session, cluster_ip: str) -> tuple:
 
   Uses v3 /vms/list with offset pagination. Falls back to paginated v2 /vms
   if the v3 list API is unavailable. Does not GET each VM individually.
+
+  Args:
+    session (requests.Session): Authenticated session used to call Prism APIs.
+    cluster_ip (str): Prism Element cluster IP or FQDN.
   """
   base_v3 = f"https://{cluster_ip}:9440/api/nutanix/v3"
   entities = []
@@ -218,7 +238,12 @@ def _list_vm_entities(session: requests.Session, cluster_ip: str) -> tuple:
 
 
 def _list_vm_entities_v2(session: requests.Session, cluster_ip: str) -> tuple:
-  """Page through v2 /vms and return (entities, incomplete)."""
+  """Page through v2 /vms and return (entities, incomplete).
+
+  Args:
+    session (requests.Session): Authenticated session used to call Prism APIs.
+    cluster_ip (str): Prism Element cluster IP or FQDN.
+  """
   base_v2 = f"https://{cluster_ip}:9440/api/nutanix/v2.0/vms"
   entities = []
   page = 1
